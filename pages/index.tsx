@@ -4,7 +4,7 @@ import Title from '../components/Title';
 import useContentful from '../utils/hooks/useContentful';
 import ReactMarkdown from 'react-markdown';
 
-const IndexPage: React.SFC<> = () => {
+const IndexPage: React.SFC<Record<never, never>> = () => {
     const [data, loading, error] = useContentful(process.env.NEXT_PUBLIC_MANIFEST_ID);
 
     if (loading) return <div>Loading...</div>;
