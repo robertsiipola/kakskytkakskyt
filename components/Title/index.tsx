@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { useMediaQuery } from 'react-responsive';
 import styles from './title.module.css';
 
-const Title: React.FC<> = () => {
+const Title: React.FC<Record<never, never>> = () => {
     return (
         <div className={styles.title}>
             <h1>KakskytKakskyt</h1>

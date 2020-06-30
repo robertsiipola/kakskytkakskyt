@@ -1,12 +1,11 @@
 import React from 'react';
-import Link from 'next/link';
 import Layout from '../components/Layout';
 
-const AboutPage = () => (
+const About: React.FC<Record<never, never>> = () => {
     <Layout title="About | KakskytKakskyt">
         <h1>Meistä</h1>
         <p>Täällä ei ole vielä mitään...</p>
-    </Layout>
-);
+    </Layout>;
+};
 
-export default AboutPage;
+export default About;
