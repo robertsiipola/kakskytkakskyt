@@ -4,7 +4,32 @@
 //
 // import User from 'path/to/interfaces';
 
-export type User = {
-  id: number
-  name: string
+export interface Author {
+    id: string;
+    firstName: string;
+    lastName: string;
+}
+
+export interface BlogPost {
+    id: string;
+    title: string;
+    media?: string;
+    description: string;
+    body: string;
+    author: Author;
+    publishDate: string;
+    tags?: string[];
+    slug: string;
+}
+
+export interface Post {
+    title: string;
+    description: string;
+    body: string;
+}
+
+export interface StateInterface {
+    response: BlogPost | null;
+    loading: boolean;
+    error: string | null;
 }

@@ -1,0 +1,8 @@
+.main {
+    max-width: 1080px;
+    text-align: left;
+    margin: auto;
+    padding: 10px;
+    flex-shrink: 0;
+    flex-grow: 1;
+}
