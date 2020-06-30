@@ -10,7 +10,7 @@ const IndexPage: React.SFC<> = () => {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error</div>;
     return (
-        <Layout title="Home | Next.js + TypeScript Example">
+        <Layout title="Home | KakskytKakskyt">
             <Title></Title>
             <div>
                 {data && (
