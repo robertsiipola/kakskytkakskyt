@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
-class CustomDocument extends Document<Record<never, never>> {
+class CustomDocument extends Document<Record<string, unknown>> {
     render() {
         return (
             <Html lang="en-FI">
