@@ -1,11 +1,13 @@
 import { useEffect, useReducer } from 'react';
-import { StateInterface } from '../../interfaces/index';
+import { StateInterface, Post } from '../../interfaces/index';
 import { createClient } from 'contentful';
 import postParser from '../parsers/postParser';
 
-type ActionType = {
-    type: 'LOADING' | 'COMPLETE' | 'ERROR';
-};
+// type ActionType = {
+//     type: 'LOADING' | 'COMPLETE' | 'ERROR';
+// };
+
+type ActionType = { type: 'LOADING' } | { type: 'COMPLETE'; response: Post } | { type: 'ERROR'; error: string };
 
 const initialState: StateInterface = {
     response: null,
@@ -14,8 +16,8 @@ const initialState: StateInterface = {
 };
 
 const client = createClient({
-    space: process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
-    accessToken: process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
+    space: <string>process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
+    accessToken: <string>process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
 });
 
 const contentfulReducer = (state: StateInterface, action: ActionType) => {
@@ -23,16 +25,17 @@ const contentfulReducer = (state: StateInterface, action: ActionType) => {
         case 'LOADING':
             return { ...state, loading: true };
         case 'COMPLETE':
-            return { ...state, response: action.payload.response, loading: false };
+            return { ...state, response: action.response, loading: false };
         case 'ERROR':
-            return { ...state, loading: false, error: action.payload.error };
+            return { ...state, loading: false, error: action.error };
         default:
             throw new Error('Something went wrong');
     }
 };
 
-const useContentful = (id: string): [] => {
+const useContentful = (): [Post | null, boolean, string | null] => {
     const [state, dispatch] = useReducer(contentfulReducer, initialState);
+    const id: string | undefined = process.env.NEXT_PUBLIC_MANIFEST_ID;
 
     useEffect(() => {
         dispatch({ type: 'LOADING' });
@@ -40,9 +43,11 @@ const useContentful = (id: string): [] => {
             client
                 .getEntry(id)
                 .then((entry) => {
-                    dispatch({ type: 'COMPLETE', payload: { response: postParser(entry) } });
+                    dispatch({ type: 'COMPLETE', response: postParser(entry) });
                 })
-                .catch((error) => dispatch({ type: 'ERROR', payload: { error } }));
+                .catch((error) => dispatch({ type: 'ERROR', error: error.message }));
+        } else {
+            dispatch({ type: 'ERROR', error: 'ID undefined' });
         }
     }, [id]);
 

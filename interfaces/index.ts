@@ -10,18 +10,6 @@ export interface Author {
     lastName: string;
 }
 
-export interface BlogPost {
-    id: string;
-    title: string;
-    media?: string;
-    description: string;
-    body: string;
-    author: Author;
-    publishDate: string;
-    tags?: string[];
-    slug: string;
-}
-
 export interface Post {
     title: string;
     description: string;
@@ -29,7 +17,12 @@ export interface Post {
 }
 
 export interface StateInterface {
-    response: BlogPost | null;
+    response: Post | null;
     loading: boolean;
     error: string | null;
+}
+
+export interface ClientInit {
+    space: string | undefined;
+    accessToken: string | undefined;
 }

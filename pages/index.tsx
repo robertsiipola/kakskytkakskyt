@@ -5,7 +5,7 @@ import useContentful from '../utils/hooks/useContentful';
 import ReactMarkdown from 'react-markdown';
 
 const IndexPage: React.FC<Record<never, never>> = () => {
-    const [data, loading, error] = useContentful(process.env.NEXT_PUBLIC_MANIFEST_ID);
+    const [data, loading, error] = useContentful();
 
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error</div>;
