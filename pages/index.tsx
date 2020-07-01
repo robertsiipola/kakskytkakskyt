@@ -16,7 +16,9 @@ const IndexPage: React.FC<Record<never, never>> = () => {
                 {data && (
                     <>
                         <h2>{data.title}</h2>
-                        <ReactMarkdown source={data.body} />
+                        <div>
+                            <ReactMarkdown source={data.body} />
+                        </div>
                     </>
                 )}
             </div>
