@@ -38,3 +38,9 @@ h4 {
 h5 {
     font-size: 1.25rem;
 }
+
+@media screen and (max-width: 600px) {
+    body {
+        font-size: 1.3rem;
+    }
+}
