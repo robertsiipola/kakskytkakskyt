@@ -17,15 +17,15 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
             <header>
                 <nav>
                     <Link href="/">
-                        <a>Kotisivu</a>
+                        <a>Home</a>
                     </Link>{' '}
                     🏠 |{' '}
                     <Link href="/about">
-                        <a>Meistä</a>
+                        <a>About</a>
                     </Link>{' '}
                     👋 |{' '}
                     <Link href="/blog">
-                        <a>Blogi</a>
+                        <a>Blog</a>
                     </Link>{' '}
                     📚
                 </nav>
