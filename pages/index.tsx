@@ -13,7 +13,7 @@ const IndexPage: React.FC<Record<never, never>> = () => {
     return (
         <Layout title="Home | KakskytKakskyt">
             <Title></Title>
-            <div>
+            <div className={styles.foo}>
                 <h2 className={styles.title}>{data.title}</h2>
                 <ReactMarkdown source={data.body} />
             </div>

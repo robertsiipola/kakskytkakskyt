@@ -2,3 +2,13 @@
     font-style: italic;
     text-align: center;
 }
+
+.foo > p > img {
+    max-width: 98vw;
+}
+
+.foo > p {
+    max-width: 96vw;
+    word-wrap: break-word;
+    margin-right: 10px;
+}
