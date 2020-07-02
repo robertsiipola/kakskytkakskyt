@@ -1,14 +1,14 @@
 .title {
     font-style: italic;
     text-align: center;
+    padding-right: 15px;
+}
+
+.foo {
+    display: inline-block;
 }
 
 .foo > p > img {
-    max-width: 98vw;
-}
-
-.foo > p {
-    max-width: 96vw;
-    word-wrap: break-word;
-    margin-right: 10px;
+    max-width: 130vw;
+    text-align: center;
 }
