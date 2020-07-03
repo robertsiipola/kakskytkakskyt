@@ -3,3 +3,9 @@
     padding: 10px;
     margin: auto;
 }
+
+@media only screen and (max-width: 600px) {
+    .main {
+        max-width: 100vw;
+    }
+}
