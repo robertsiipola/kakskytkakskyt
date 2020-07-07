@@ -15,7 +15,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
                 <title>{title}</title>
             </Head>
             <header>
-                <nav>
+                <nav className={styles.nav}>
                     <Link href="/">
                         <a>Koti</a>
                     </Link>{' '}

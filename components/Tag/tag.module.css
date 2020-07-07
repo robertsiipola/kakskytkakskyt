@@ -1,0 +1,8 @@
+.tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+}
+
+.tag:hover {
+    text-decoration: underline;
+}

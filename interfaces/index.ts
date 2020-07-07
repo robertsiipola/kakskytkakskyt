@@ -14,6 +14,9 @@ export interface Post {
     title: string;
     description: string;
     body: string;
+    slug: string;
+    author: Author | null;
+    tags: string[] | null;
 }
 
 export interface StateInterface {
