@@ -14,14 +14,16 @@ interface BlogPost {
 }
 
 const BlogPost: React.FC<BlogPost> = (props) => {
-    const { post } = props;
+    const post: Post | null = _.get(props, 'post', null);
     return (
         <Layout title="Blog Post">
-            <div className={styles.blog}>
-                <h1>{post.title}</h1>
-                <h4>Teksti: {post.author.firstName}</h4>
-                <ReactMarkdown source={post.body} />
-            </div>
+            {post && (
+                <div className={styles.blog}>
+                    <h1>{post.title}</h1>
+                    <h4>Teksti: {post.author?.firstName}</h4>
+                    <ReactMarkdown source={post.body} />
+                </div>
+            )}
         </Layout>
     );
 };
