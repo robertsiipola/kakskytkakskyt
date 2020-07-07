@@ -1,0 +1,29 @@
+.title {
+    margin: 0px;
+}
+
+.paragraph {
+}
+
+@media only screen and (max-width: 600px) {
+    .paragraph {
+        max-width: 75vw;
+    }
+}
+
+.list {
+    list-style-type: none;
+    padding: 0;
+}
+.list > li {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.postcard {
+    background-color: white;
+}
+
+.author {
+    font-size: 0.8rem;
+}

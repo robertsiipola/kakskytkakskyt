@@ -7,3 +7,10 @@
     flex-shrink: 0;
     align-items: center;
 }
+
+.nav > a {
+    font-weight: bold;
+}
+.nav > a:visited {
+    color: black;
+}

@@ -3,4 +3,6 @@
     flex-direction: column;
     justify-content: center;
     overflow: auto;
+    background-color: #f9f6ef;
+    min-height: 100vh;
 }
