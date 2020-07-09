@@ -1,23 +1,28 @@
-interface Response {
+import { createClient } from 'contentful';
+const client = createClient({
+    space: <string>process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
+    accessToken: <string>process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
+});
+
+interface Item {
     fields: {
         [slug: string]: string;
     };
+    sys: unknown;
 }
 
 const fetchAllWithSlugs = async (): Promise<Array<string>> => {
-    const url = `https://cdn.contentful.com/spaces/${process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID}/environments/${process.env.NEXT_PUBLIC_CONTENTFUL_ENVIRONMENT_ID}/entries?content_type=blogPost&select=fields.slug`;
-    const res = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
-        },
+    const entries = await client.getEntries({
+        content_type: 'blogPost',
+        select: 'fields.slug',
     });
-    const data = await res.json();
-    const slug: string[] = data?.items?.map((item: Response) => {
-        return item.fields.slug;
+
+    const slugs = entries.items.map((item) => {
+        const typeSafeItem = item as Item;
+        return typeSafeItem.fields.slug;
     });
-    return slug;
+
+    return slugs;
 };
 
 export default fetchAllWithSlugs;
