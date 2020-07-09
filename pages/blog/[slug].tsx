@@ -6,6 +6,8 @@ import * as _ from 'lodash';
 import { Post } from '../../interfaces';
 import ReactMarkdown from 'react-markdown';
 import styles from './blog.module.css';
+import fetchWithSlug from '../../utils/api/fetchWithSlug';
+import fetchPreviewWithSlug from '../../utils/api/fetchPreviewWithSlug';
 
 interface BlogPost {
     props: {
@@ -49,29 +51,21 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    const slug: string | null = _.get(context, 'params.slug', null);
-    if (slug) {
-        const url = `https://cdn.contentful.com/spaces/${process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID}/environments/${process.env.NEXT_PUBLIC_CONTENTFUL_ENVIRONMENT_ID}/entries?content_type=blogPost&fields.slug=${slug}`;
-        const res = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
+    const slug: (string | string[]) | null = _.get(context, 'params.slug', null);
+    if (context.preview) {
+        const post = await fetchPreviewWithSlug(slug);
+        return {
+            props: {
+                post: post,
             },
-        });
-        const data = await res.json();
-        const post = postsParser(data);
-        if (post.length === 1) {
-            return {
-                props: {
-                    post: post[0],
-                },
-            };
-        } else {
-            throw new Error('More than one blog post with the same slug found. Can not identify blog post');
-        }
+        };
     } else {
-        throw new Error('No slug found. Can not identify blog post');
+        const post = await fetchWithSlug(slug);
+        return {
+            props: {
+                post: post,
+            },
+        };
     }
 };
 
