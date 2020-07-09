@@ -8,6 +8,7 @@ import ReactMarkdown from 'react-markdown';
 import styles from './blog.module.css';
 import fetchWithSlug from '../../utils/api/fetchWithSlug';
 import fetchPreviewWithSlug from '../../utils/api/fetchPreviewWithSlug';
+import Alert from '../../components/Alert';
 
 interface BlogPost {
     props: {
@@ -17,8 +18,10 @@ interface BlogPost {
 
 const BlogPost: React.FC<BlogPost> = (props) => {
     const post: Post | null = _.get(props, 'post', null);
+    const preview: boolean = _.get(props, 'preview', false);
     return (
         <Layout title="Blog Post">
+            <Alert preview={preview}></Alert>
             {post && (
                 <div className={styles.blog}>
                     <h1>{post.title}</h1>
@@ -57,6 +60,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         return {
             props: {
                 post: post,
+                preview: true,
             },
         };
     } else {
@@ -64,6 +68,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
         return {
             props: {
                 post: post,
+                preview: false,
             },
         };
     }
