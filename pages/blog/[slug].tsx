@@ -1,7 +1,6 @@
 import React from 'react';
 import Layout from '../../components/Layout';
 import { GetStaticProps, GetStaticPaths } from 'next';
-import postsParser from '../../utils/parsers/postsParser';
 import * as _ from 'lodash';
 import { Post } from '../../interfaces';
 import ReactMarkdown from 'react-markdown';
@@ -9,6 +8,7 @@ import styles from './blog.module.css';
 import fetchWithSlug from '../../utils/api/fetchWithSlug';
 import fetchPreviewWithSlug from '../../utils/api/fetchPreviewWithSlug';
 import Alert from '../../components/Alert';
+import fetchAllWithSlugs from '../../utils/api/fetchAllWithSlugs';
 
 interface BlogPost {
     props: {
@@ -34,19 +34,10 @@ const BlogPost: React.FC<BlogPost> = (props) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const url = `https://cdn.contentful.com/spaces/${process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID}/environments/${process.env.NEXT_PUBLIC_CONTENTFUL_ENVIRONMENT_ID}/entries?content_type=blogPost`;
-    const res = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
-        },
-    });
-    const data = await res.json();
-    const posts = postsParser(data);
-    const paths = posts.map((post) => ({
+    const slugs = await fetchAllWithSlugs();
+    const paths = slugs.map((slug) => ({
         params: {
-            slug: post.slug,
+            slug: slug,
         },
     }));
 
