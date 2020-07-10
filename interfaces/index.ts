@@ -14,9 +14,26 @@ export interface Post {
     title: string;
     description: string;
     body: string;
-    slug: string;
     author: Author | null;
     tags: string[] | null;
+    slug: string;
+}
+
+export interface RawPost {
+    title: string;
+    description: string;
+    body: string;
+    author: {
+        [sys: string]: unknown;
+        [fields: string]: Author;
+    } | null;
+    tags: string[] | null;
+    slug: string;
+}
+
+export interface RawPostItemJson {
+    sys: unknown;
+    fields: RawPost;
 }
 
 export interface StateInterface {
@@ -28,4 +45,18 @@ export interface StateInterface {
 export interface ClientInit {
     space: string | undefined;
     accessToken: string | undefined;
+}
+
+export interface BlogPostJSON {
+    sys: unknown;
+    fields: RawPost;
+}
+
+export interface BlogPostWithSlug {
+    sys: unknown;
+    total: unknown;
+    skip: unknown;
+    limit: unknown;
+    items: BlogPostWithSlugEntryItem[];
+    includes: unknown;
 }

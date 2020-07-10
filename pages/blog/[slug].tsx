@@ -8,11 +8,19 @@ import styles from './blog.module.css';
 import fetchWithSlug from '../../utils/api/fetchWithSlug';
 import fetchPreviewWithSlug from '../../utils/api/fetchPreviewWithSlug';
 import Alert from '../../components/Alert';
-import fetchAllWithSlugs from '../../utils/api/fetchAllWithSlugs';
+import fetchAllSlugs from '../../utils/api/fetchAllWithSlugs';
 
 interface BlogPost {
     props: {
         [post: string]: Post;
+    };
+}
+
+interface context {
+    preview: boolean;
+    previewData: unknown;
+    params: {
+        [slug: string]: string | string[];
     };
 }
 
@@ -34,7 +42,7 @@ const BlogPost: React.FC<BlogPost> = (props) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const slugs = await fetchAllWithSlugs();
+    const slugs = await fetchAllSlugs();
     const paths = slugs.map((slug) => ({
         params: {
             slug: slug,
@@ -46,6 +54,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
     const slug: (string | string[]) | null = _.get(context, 'params.slug', null);
+    console.log(slug);
     if (context.preview) {
         const post = await fetchPreviewWithSlug(slug);
         return {

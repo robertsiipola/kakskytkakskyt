@@ -1,4 +1,7 @@
 import { createClient } from 'contentful';
+import { Post, BlogPostJSON } from '../../interfaces';
+import postsParser from '../parsers/postsParser';
+
 const client = createClient({
     space: <string>process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
     accessToken: <string>process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
@@ -11,7 +14,7 @@ interface Item {
     sys: unknown;
 }
 
-const fetchAllWithSlugs = async (): Promise<Array<string>> => {
+const fetchAllSlugs = async (): Promise<Array<string>> => {
     const entries = await client.getEntries({
         content_type: 'blogPost',
         select: 'fields.slug',
@@ -25,4 +28,15 @@ const fetchAllWithSlugs = async (): Promise<Array<string>> => {
     return slugs;
 };
 
-export default fetchAllWithSlugs;
+export const fetchAllWithSlugs = async (): Promise<Post[]> => {
+    const data = await client.getEntries({
+        content_type: 'blogPost',
+    });
+
+    const entries = data.items as BlogPostJSON[];
+    const posts = postsParser(entries);
+
+    return posts;
+};
+
+export default fetchAllSlugs;

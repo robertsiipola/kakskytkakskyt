@@ -1,26 +1,27 @@
-import { Post } from '../../interfaces';
+import { Post, BlogPostJSON } from '../../interfaces';
 import postsParser from '../parsers/postsParser';
 
-const fetchWithSlug = async (slug: (string | string[]) | null): Promise<Post> => {
-    if (slug && typeof slug === 'string') {
-        const url = `https://cdn.contentful.com/spaces/${process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID}/environments/${process.env.NEXT_PUBLIC_CONTENTFUL_ENVIRONMENT_ID}/entries?content_type=blogPost&fields.slug=${slug}`;
-        const token = process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN;
+import { createClient } from 'contentful';
 
-        const res = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + token,
-            },
+const client = createClient({
+    space: <string>process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
+    accessToken: <string>process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
+});
+
+const fetchWithSlug = async (slug: (string | string[]) | null): Promise<Post> => {
+    if (slug) {
+        const data = await client.getEntries({
+            content_type: 'blogPost',
+            limit: 1,
+            'fields.slug[in]': slug,
         });
-        const data = await res.json();
-        const posts = postsParser(data);
+        const entries = data.items as BlogPostJSON[];
+        const posts = postsParser(entries);
         if (posts.length === 1) {
             return posts[0];
         } else {
             throw new Error('Multiple posts found with the same slug!');
         }
-    } else {
         throw new Error('No slug found or multiple slugs received. Can not identify blog post');
     }
 };
