@@ -8,7 +8,7 @@ const Alert: React.FC<AlertProps> = ({ preview }) => {
     if (preview)
         return (
             <div>
-                This is page is a preview.{' '}
+                This page is a preview.{' '}
                 <a href="/api/exit-preview" className="underline hover:text-cyan duration-200 transition-colors">
                     Click here
                 </a>{' '}

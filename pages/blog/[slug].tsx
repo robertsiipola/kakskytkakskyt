@@ -46,6 +46,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
     const slug: (string | string[]) | null = _.get(context, 'params.slug', null);
+    console.log(slug);
     if (context.preview) {
         const post = await fetchPreviewWithSlug(slug);
         return {
