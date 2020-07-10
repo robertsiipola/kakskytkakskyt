@@ -1,11 +1,14 @@
 import React from 'react';
 import Layout from '../../components/Layout';
 import { GetStaticProps, GetStaticPaths } from 'next';
-import postsParser from '../../utils/parsers/postsParser';
 import * as _ from 'lodash';
 import { Post } from '../../interfaces';
 import ReactMarkdown from 'react-markdown';
 import styles from './blog.module.css';
+import fetchWithSlug from '../../utils/api/fetchWithSlug';
+import fetchPreviewWithSlug from '../../utils/api/fetchPreviewWithSlug';
+import Alert from '../../components/Alert';
+import fetchAllSlugs from '../../utils/api/fetchAllWithSlugs';
 
 interface BlogPost {
     props: {
@@ -15,8 +18,10 @@ interface BlogPost {
 
 const BlogPost: React.FC<BlogPost> = (props) => {
     const post: Post | null = _.get(props, 'post', null);
+    const preview: boolean = _.get(props, 'preview', false);
     return (
         <Layout title="Blog Post">
+            <Alert preview={preview}></Alert>
             {post && (
                 <div className={styles.blog}>
                     <h1>{post.title}</h1>
@@ -29,19 +34,10 @@ const BlogPost: React.FC<BlogPost> = (props) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const url = `https://cdn.contentful.com/spaces/${process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID}/environments/${process.env.NEXT_PUBLIC_CONTENTFUL_ENVIRONMENT_ID}/entries?content_type=blogPost`;
-    const res = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
-        },
-    });
-    const data = await res.json();
-    const posts = postsParser(data);
-    const paths = posts.map((post) => ({
+    const slugs = await fetchAllSlugs();
+    const paths = slugs.map((slug) => ({
         params: {
-            slug: post.slug,
+            slug: slug,
         },
     }));
 
@@ -49,29 +45,23 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-    const slug: string | null = _.get(context, 'params.slug', null);
-    if (slug) {
-        const url = `https://cdn.contentful.com/spaces/${process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID}/environments/${process.env.NEXT_PUBLIC_CONTENTFUL_ENVIRONMENT_ID}/entries?content_type=blogPost&fields.slug=${slug}`;
-        const res = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
+    const slug: (string | string[]) | null = _.get(context, 'params.slug', null);
+    if (context.preview) {
+        const post = await fetchPreviewWithSlug(slug);
+        return {
+            props: {
+                post: post,
+                preview: true,
             },
-        });
-        const data = await res.json();
-        const post = postsParser(data);
-        if (post.length === 1) {
-            return {
-                props: {
-                    post: post[0],
-                },
-            };
-        } else {
-            throw new Error('More than one blog post with the same slug found. Can not identify blog post');
-        }
+        };
     } else {
-        throw new Error('No slug found. Can not identify blog post');
+        const post = await fetchWithSlug(slug);
+        return {
+            props: {
+                post: post,
+                preview: false,
+            },
+        };
     }
 };
 

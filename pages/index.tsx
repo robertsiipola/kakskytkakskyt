@@ -4,8 +4,8 @@ import Title from '../components/Title';
 import ReactMarkdown from 'react-markdown';
 import styles from '../components/Title/title.module.css';
 import { GetStaticProps } from 'next';
-import { postParser } from '../utils/parsers/postsParser';
 import { Post } from '../interfaces';
+import fetchWithId from '../utils/api/fetchWithId';
 
 const IndexPage: React.FC<Record<string, unknown>> = (props) => {
     const post = props.post as Post;
@@ -21,16 +21,8 @@ const IndexPage: React.FC<Record<string, unknown>> = (props) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-    const url = `https://cdn.contentful.com/spaces/${process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID}/environments/${process.env.NEXT_PUBLIC_CONTENTFUL_ENVIRONMENT_ID}/entries/${process.env.NEXT_PUBLIC_MANIFEST_ID}`;
-    const res = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
-        },
-    });
-    const data = await res.json();
-    const post = postParser(data);
+    const id = process.env.NEXT_PUBLIC_MANIFEST_ID as string;
+    const post = await fetchWithId(id);
 
     return {
         props: {
