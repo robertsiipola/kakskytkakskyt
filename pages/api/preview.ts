@@ -5,7 +5,7 @@ export default async function preview(req: NextApiRequest, res: NextApiResponse)
     const { secret, slug } = req.query;
 
     if (secret !== process.env.CONTENTFUL_SECRET_TOKEN || !slug) {
-        return res.status(401).json({ message: 'Invalid token' });
+        return res.status(401).json({ message: 'Invalid token', secret: secret, slug: slug });
     }
 
     const post = await fetchPreviewWithSlug(slug);
