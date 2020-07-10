@@ -16,14 +16,6 @@ interface BlogPost {
     };
 }
 
-interface context {
-    preview: boolean;
-    previewData: unknown;
-    params: {
-        [slug: string]: string | string[];
-    };
-}
-
 const BlogPost: React.FC<BlogPost> = (props) => {
     const post: Post | null = _.get(props, 'post', null);
     const preview: boolean = _.get(props, 'preview', false);
@@ -54,7 +46,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (context) => {
     const slug: (string | string[]) | null = _.get(context, 'params.slug', null);
-    console.log(slug);
     if (context.preview) {
         const post = await fetchPreviewWithSlug(slug);
         return {

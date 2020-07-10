@@ -19,14 +19,16 @@ export interface Post {
     slug: string;
 }
 
+export interface RawAuthor {
+    sys: unknown;
+    fields: Author;
+}
+
 export interface RawPost {
     title: string;
     description: string;
     body: string;
-    author: {
-        [sys: string]: unknown;
-        [fields: string]: Author;
-    } | null;
+    author: RawAuthor | null;
     tags: string[] | null;
     slug: string;
 }
@@ -50,13 +52,4 @@ export interface ClientInit {
 export interface BlogPostJSON {
     sys: unknown;
     fields: RawPost;
-}
-
-export interface BlogPostWithSlug {
-    sys: unknown;
-    total: unknown;
-    skip: unknown;
-    limit: unknown;
-    items: BlogPostWithSlugEntryItem[];
-    includes: unknown;
 }

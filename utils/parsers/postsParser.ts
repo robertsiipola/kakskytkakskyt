@@ -16,7 +16,7 @@ const postsParser = (entries: BlogPostJSON[]): Post[] => {
     // see the contentful API s
     if (entries.length > 0) {
         const posts = entries.map((el) => {
-            return el.fields;
+            return postParser(el.fields);
         });
         return posts;
     } else {

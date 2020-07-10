@@ -1,14 +1,14 @@
-import { Post } from '../../interfaces';
+import { Post, BlogPostJSON } from '../../interfaces';
 import postsParser from '../parsers/postsParser';
 import { createClient } from 'contentful';
 
 const client = createClient({
-    space: process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
-    accessToken: process.env.NEXT_PUBLIC_CONTENTFUL_PREVIEW_ACCESS_TOKEN,
+    space: <string>process.env.NEXT_PUBLIC_CONTENTFUL_SPACE_ID,
+    accessToken: <string>process.env.NEXT_PUBLIC_CONTENTFUL_PREVIEW_ACCESS_TOKEN,
     host: 'preview.contentful.com',
 });
 
-const fetchPreviewWithSlug = async (slug: (string | string[]) | null): Promise<Post> => {
+const fetchPreviewWithSlug = async (slug: (string | string[]) | null): Promise<Post | undefined> => {
     if (slug) {
         const data = await client.getEntries({
             content_type: 'blogPost',

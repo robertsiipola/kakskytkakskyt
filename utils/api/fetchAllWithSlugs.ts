@@ -28,7 +28,7 @@ const fetchAllSlugs = async (): Promise<Array<string>> => {
     return slugs;
 };
 
-export const fetchAllWithSlugs = async (): Promise<Post[]> => {
+export const fetchAllWithSlugs = async (): Promise<Post[] | undefined> => {
     const data = await client.getEntries({
         content_type: 'blogPost',
     });

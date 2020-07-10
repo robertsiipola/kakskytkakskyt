@@ -8,7 +8,7 @@ const client = createClient({
     accessToken: <string>process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
 });
 
-const fetchWithSlug = async (slug: (string | string[]) | null): Promise<Post> => {
+const fetchWithSlug = async (slug: (string | string[]) | null): Promise<Post | undefined> => {
     if (slug) {
         const data = await client.getEntries({
             content_type: 'blogPost',
